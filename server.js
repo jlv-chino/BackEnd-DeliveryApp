@@ -5,6 +5,7 @@ const server = http.createServer(app);
 const logger = require('cors');
 const cors = require('cors');
 const passport = require('passport');
+const multer = require('multer');
 
 const port = process.env.PORT || 3000;
 
@@ -26,9 +27,13 @@ app.disable('x-powered-by');
 
 app.set('port', port);
 
-usersRoutes(app);
+const upload = multer({
+    storage: multer.memoryStorage()
+});
 
-server.listen(3000, '192.168.100.18' || 'localhost', function () {
+usersRoutes(app, upload);
+
+server.listen(3000, '192.168.1.17' || 'localhost', function () {
     console.log('Aplicación de NodeJS ' + process.pid + ' Iniciada...');
 });
 

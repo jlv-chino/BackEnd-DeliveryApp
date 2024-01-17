@@ -11,6 +11,7 @@ User.findById = (id, result) => {
             email,
             name,
             lastname,
+            phone,
             image,
             password
         FROM 
@@ -44,6 +45,7 @@ User.findByEmail = (email, result) => {
             email,
             name,
             lastname,
+            phone,
             image,
             password
         FROM 
