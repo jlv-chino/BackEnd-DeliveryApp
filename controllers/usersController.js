@@ -29,9 +29,7 @@ module.exports = {
             const isPasswordValid = await bcrypt.compare(password, myUser.password);
 
             if (isPasswordValid) {
-                const token = jwt.sign({ id: myUser.id, email: myUser.email }, Keys.secretOrKey, {
-
-                });
+                const token = jwt.sign({ id: myUser.id, email: myUser.email }, Keys.secretOrKey, {});
 
                 const data = {
                     id: myUser.id,
@@ -49,7 +47,7 @@ module.exports = {
                     data: data
                 });
 
-            }else{
+            } else {
 
                 return res.status(401).json({
                     success: false,
@@ -85,16 +83,17 @@ module.exports = {
 
         const files = req.files;
 
-        if(files.length > 0){
+        if (files.length > 0) {
             const path = `image_${Date.now()}`;
             const url = await storage(files[0], path);
 
-            if(url != undefined && url != null){
+            if (url != undefined && url != null) {
                 user.image = url;
             }
         }
 
         User.create(user, (err, data) => {
+
             if (err) {
                 return res.status(501).json({
                     success: false,
@@ -104,6 +103,8 @@ module.exports = {
             }
 
             user.id = data;
+            const token = jwt.sign({ id: user.id, email: user.email }, Keys.secretOrKey, {});
+            user.session_token = `JWT ${token}`;
 
             return res.status(201).json({
                 success: true,
